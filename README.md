@@ -63,9 +63,9 @@ Deployment              NGINX Ingress
 
 ## Kubernetes Deployment
 
-The application runs with **3 replicas** for high availability.
+The application is deployed using a Kubernetes Deployment with 3 replicas.
 
-Resources configured:
+### Resources
 
 - CPU Request: `200m`
 - CPU Limit: `1`
@@ -73,29 +73,33 @@ Resources configured:
 - Memory Limit: `1Gi`
 - Liveness probe
 - Readiness probe
-- Rolling deployment
+- Rolling update strategy
+
+The deployment provides multiple application pods for availability and allows Kubernetes to replace failed pods automatically.
 
 ---
 
 ## Kubernetes Service
 
-The Spring PetClinic application is exposed through a Kubernetes Service.
+The application is exposed through a Kubernetes Service.
 
 ```text
-Service
-   |
-   v
-Port 80
-   |
-   v
-Target Port 8080
+Kubernetes Service
+        |
+        | Port 80
+        v
+Spring PetClinic Pods
+        |
+        | Target Port 8080
+        v
+Spring PetClinic Application
 ```
 
 ---
 
 ## NGINX Ingress
 
-NGINX Ingress Controller is used to route external HTTP traffic to the Spring PetClinic Kubernetes Service.
+NGINX Ingress Controller is used to route HTTP traffic to the Spring PetClinic Kubernetes Service.
 
 ```text
 Internet
@@ -114,15 +118,15 @@ Spring PetClinic Pods
 
 ## Horizontal Pod Autoscaling
 
-HPA is configured to automatically scale the Spring PetClinic deployment based on CPU utilization.
+Horizontal Pod Autoscaler (HPA) is configured to automatically scale the application based on CPU utilization.
 
-Configuration:
+### HPA Configuration
 
 - Minimum replicas: `3`
 - Maximum replicas: `6`
 - CPU target: `50%`
 
-The HPA uses Kubernetes Metrics Server to obtain resource utilization.
+The HPA uses Kubernetes Metrics Server to obtain CPU utilization metrics.
 
 ---
 
@@ -137,7 +141,7 @@ kubectl top nodes
 kubectl top pods
 ```
 
-Example monitoring output:
+Example application pod metrics:
 
 ```text
 NAME                               CPU(cores)   MEMORY(bytes)
@@ -152,7 +156,7 @@ spring-petclinic-79c68d764-sgr2n   2m           244Mi
 
 The Jenkins pipeline automates the application build and Kubernetes deployment.
 
-Pipeline stages include:
+Pipeline flow:
 
 ```text
 Checkout
@@ -176,7 +180,7 @@ Kubernetes Deployment
 Deployment Verification
 ```
 
-The pipeline uses a `Jenkinsfile` stored in this repository.
+The Jenkins pipeline is defined in the `Jenkinsfile` stored in this repository.
 
 ---
 
@@ -204,8 +208,8 @@ The pipeline uses a `Jenkinsfile` stored in this repository.
 | File | Purpose |
 |---|---|
 | `deployment.yaml` | Kubernetes application deployment |
-| `service.yaml` | Kubernetes service |
-| `ingress.yaml` | NGINX ingress configuration |
+| `service.yaml` | Kubernetes Service |
+| `ingress.yaml` | NGINX Ingress configuration |
 | `hpa.yaml` | Horizontal Pod Autoscaler |
 | `Jenkinsfile` | Jenkins CI/CD pipeline |
 | `.gitignore` | Git ignore configuration |
@@ -214,49 +218,49 @@ The pipeline uses a `Jenkinsfile` stored in this repository.
 
 ## Useful Kubernetes Commands
 
-Check pods:
+### Check Pods
 
 ```bash
 kubectl get pods -o wide
 ```
 
-Check deployment:
+### Check Deployment
 
 ```bash
 kubectl get deployment
 ```
 
-Check services:
+### Check Services
 
 ```bash
 kubectl get svc
 ```
 
-Check ingress:
+### Check Ingress
 
 ```bash
 kubectl get ingress
 ```
 
-Check HPA:
+### Check HPA
 
 ```bash
 kubectl get hpa
 ```
 
-Check node resources:
+### Check Node Resources
 
 ```bash
 kubectl top nodes
 ```
 
-Check pod resources:
+### Check Pod Resources
 
 ```bash
 kubectl top pods
 ```
 
-Describe a pod:
+### Describe a Pod
 
 ```bash
 kubectl describe pod <POD_NAME>
@@ -308,4 +312,16 @@ Spring PetClinic
 HPA + Metrics Server
 ```
 
-The project demonstrates practical experience with **CI/CD, Docker, Kubernetes, AWS, Jenkins, NGINX Ingress, HPA, and Kubernetes monitoring**.
+### Skills Demonstrated
+
+- CI/CD with Jenkins
+- Docker containerization
+- Kubernetes deployment and administration
+- AWS EC2 infrastructure
+- Kubernetes Services
+- NGINX Ingress
+- Horizontal Pod Autoscaling
+- Metrics Server monitoring
+- Maven application builds
+- Docker Hub image management
+- Kubernetes troubleshooting and verification
